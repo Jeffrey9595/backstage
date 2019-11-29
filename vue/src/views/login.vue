@@ -1,6 +1,7 @@
 <template>
   <div class="login">
     <div class="login-leftimg">
+      123
       <img src="../assets/8a49f320a74dcac3dd616d74fbc62d6.jpg" alt />
     </div>
     <div class="login-box">
