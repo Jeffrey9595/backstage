@@ -6,7 +6,10 @@ class HTTP {
             Axios({
                 method: params.type || 'get',
                 url: params.url,
-                data: (params.data)
+                data: (params.data),
+                headers: {
+                    token: JSON.parse(localStorage.getItem('token'))
+                }
             }).then(res => {
                 resolve(res)
             })
