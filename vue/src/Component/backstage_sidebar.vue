@@ -1,34 +1,34 @@
 <template>
   <div class="welcome_left">
     <el-menu
-      default-active="1-4-1"
+      default-active="1"
       class="el-menu-vertical-demo"
       :collapse="collapse"
       text-color="#fff"
       background-color="#373d41"
+      v-for="(v,i) in menu"
+      :key="i"
       router
     >
-      <el-submenu
-        v-show="item.hidden==false"
-        :key="index"
-        v-for="(item,index) in menu"
-        :index="String(item.id)"
-      >
-        <template slot="title">
-          <i class="el-icon-user-solid" v-if="item.name=='订单管理'"></i>
-          <i class="el-icon-suitcase-1" v-if="item.name=='首页管理'"></i>
-          <i class="el-icon-s-goods" v-if="item.name=='课程管理'"></i>
-          <i class="el-icon-s-order" v-if="item.name=='讲师管理'"></i>
-          <i class="el-icon-data-line" v-if="item.name=='学员管理'"></i>
-          <span :index="item.path" slot="title">{{item.name}}</span>
+      <!-- 一级 -->
+      <el-submenu :index="v.path" v-if="(v.children.length!==0)" :title="v.name" >
+        <template slot="title" >
+          <span slot="title">{{v.name}}</span>
         </template>
-        <el-menu-item :key="indexs" v-for="(items,indexs) in item.children" :index="items.path">
-          <i class="el-icon-menu"></i>
-          <span>{{items.name}}</span>
-          <el-submenu :key="indexss" v-for="(itemss,indexss) in items.children" >
-            <el-menu-item :index="itemss.path">{{itemss.name}}</el-menu-item>
-          </el-submenu>
-        </el-menu-item>
+
+          <!-- 此处为二级导航数组长度判定 -->
+          <div v-for="(s,x) in v.children" :key="x">
+            <el-menu-item :index="s.path" v-if="s.children.length == 0" :router="s" >
+              {{s.name}}
+            </el-menu-item>
+
+            <el-submenu :index="s.path" v-if="s.children.length !== 0" >
+              <span slot="title">{{s.name}}</span>
+
+              <el-menu-item :index="z.path" v-for="(z,c) in s.children" :key="c">{{z.name}} </el-menu-item>
+            </el-submenu>
+          </div>
+
       </el-submenu>
     </el-menu>
   </div>
@@ -38,19 +38,20 @@
 import Product from "../services/menu";
 const _product = new Product();
 export default {
-  props:['collapse'],
+  props: ["collapse"],
   data() {
     return {
       menu: []
     };
   },
-  methods: {},
+  methods: {
+  },
   created() {
     let token = JSON.parse(localStorage.getItem("token"));
-    console.log(token);
+    // console.log(token);
     _product.menu(token).then(res => {
       this.menu = res.data.data.sysMenu;
-      console.log(res);
+      // console.log(res);
     });
   }
 };
@@ -65,14 +66,13 @@ export default {
 .welcome_left {
   background-color: #373d41;
   flex-shrink: 0;
-  min-height: 877px;
+  min-height: 100vh;
 }
 .el-menu {
   border: none;
 }
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
-  min-height: 400px;
   background-color: #373d41;
 }
 </style>
