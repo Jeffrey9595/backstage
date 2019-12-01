@@ -2,6 +2,7 @@
   <div class="login">
     <div class="login-leftimg">
       <img src="../assets/8a49f320a74dcac3dd616d74fbc62d6.jpg" alt />
+      1
     </div>
     <div class="login-box">
       <div class="login-img">
